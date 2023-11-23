@@ -1,9 +1,9 @@
 <?php
 
-/*
-  Data: 21/11/2023
-  Descrição: Conexão com o banco de dados e retorno de possiveis erros. 
-*/
+  /*
+    Data: 21/11/2023
+    Descrição: Conexão com o banco de dados e retorno de possiveis erros. 
+  */
 
   $host = "localhost";
   $dbname = "entregas";
@@ -20,4 +20,4 @@
     echo "Erro: $error";
   }
 
-  ?>
+?>

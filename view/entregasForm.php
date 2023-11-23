@@ -11,7 +11,8 @@
     </head>
     <body>
         <div id="top-container" class="container-fluid">
-            <form id="search-form" class="form-inline" action="../control/entregas.class.php" method="GET">
+            <form id="search-form" class="form-inline" action="../control/Entregas.class.php" method="GET">
+                <!-- <input type="hidden" name="evento" id="evento" value="cadastrar"/> -->
                 <div class="form-group col-md-10">
                     <input type="text" class="form-control" id="_cpf" name="_cpf" placeholder="Digite o CPF para buscar encomendas...">
                 </div>

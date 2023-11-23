@@ -6,29 +6,37 @@
 */
     function api_transportados(){
         $url_transp = "https://run.mocky.io/v3/e8032a9d-7c4b-4044-9d00-57733a2e2637";
-        $data = json_decode(file_get_contents($url_transp));
+        $list_transp = json_decode(file_get_contents($url_transp));
 
-        foreach($data as $dados){
-            print '<br>';
-            print_r($dados);
-            print '<br>';
+        /*Retornando um array, percorre associando a chave principal ao campo. */
+        if(is_array($list_transp)){
+            foreach($list_transp as $key=>$campo){
+                $this->$key = $campo;
+            }            
         }
 
+        $cpf = Entregas::cpfForm();
+        print_r($cpf);
+        // print_r($list_transp->status);
     }
+
         $result_transp = api_transportados();
         return $result_transp;
 
-    // function api_entregas(){
-    //     $url_entregas = "https://run.mocky.io/v3/6334edd3-ad56-427b-8f71-a3a395c5a0c7";
-    //     $data_ent = json_decode(file_get_contents($url_entregas));
+    function api_entregas(){
+        $url_deliveries = "https://run.mocky.io/v3/6334edd3-ad56-427b-8f71-a3a395c5a0c7";
+        $list_deliv = json_decode(file_get_contents($url_deliveries));
 
-    //     foreach($data_ent as $view){
-    //         print '<br>';
-    //         print_r($view);
-    //         print '<br>';
-    //     }
+        /*Retornando um array, percorre associando a chave principal ao campo. */
+        if(is_array($list_deliv)){
+            foreach($list_deliv as $key=>$campo){
+                $this->$key = $campo;
+            }            
+        }
+        // print_r($list_deliv->status);
 
-    // }
-    //     $result = api_entregas();
-    //     return $result;
+    }
+
+    $result_deliv = api_entregas();
+    return $result_deliv;
 ?>
