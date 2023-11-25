@@ -1,8 +1,12 @@
 <?php
     /*
         Data: 21/11/2023
-        Descrição: Observer, responsável por notificar quando o evento é chamado.
+        Descrição: Observer, responsável por notificar o entregasForm quando há mudança de estado de entrega.
     */
+
+
+// VAI NOTIFICAR A VIEW/entregasForm sobre as mudanças no estado da encomenda
+
 
     interface Observer {
         public function getUpdateInfo($pedido);

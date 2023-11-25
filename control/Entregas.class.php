@@ -1,23 +1,21 @@
 <?php
 
-include_once("api.php");
+// include_once("api.php");
+include_once("..\model\Destinatario.php");
 
-    class Entregas {
+    class EntregasForm {
         
-        static function cpfForm() {
+        static function cpf() {
             if (isset($_GET['_cpf'])) {
-                $cpf = $_GET['_cpf'];
-                
-                $dados_entrega = API::getDeliveriesCPF($cpf);
 
-                // print_r($dados_entrega['_cep']);
-                // $cep = $delivery->_destinatario->_cep;
+                $cpf = str_replace('.', '', str_replace('-','',$_GET['_cpf']));
+                
+                $cpf_banco = new Destinatario;
+                $cpf_banco->getObject($cpf);
+               
             }
         }
     }
-
-    Entregas::cpfForm();
-
-
+    EntregasForm::cpf();
 
 ?>
