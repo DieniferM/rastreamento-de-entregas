@@ -55,59 +55,23 @@
         }
 
         static function getObjectApi($_cpf){
-            
+                
             $deliveries = Api::getApiDeliveries();
-
-                // print_r($deliveries["_destinatario"]['_cpf']);
-                // print_r($deliveries);
-
+        //    print_r($deliveries['data']);
+        
+        // print_r($result_deliveries);
+        // exit;
+        // if(count($deliveries)){
+            
             foreach($deliveries as $result_deliveries){
-                if($_cpf == $deliveries){
-                $_destinatario_cpf = $result_deliveries["_destinatario"]["_cpf"];
-                
-                print_r($_destinatario_cpf);
-                
-                        print 'entrou na funcao';
-                    // print 'entrou no if';
-                    // exit;
-                        //tem na API mas nao tem no banco
-                        // Data: 16/11/2023 10:00:00
-                        // Destinatário: Ricardo Oliveira
-                        // CPF: 81175778010
-                        // Endereço: Rua Principal, 7829
-                        // Estado: São Paulo
-                        // CEP: 07890-345
-                        // País: Brasil
-                        // Volumes: 2
-                        // Remetente: Peças Auto - TTR
-                        // Nome Transportadora: EXPRESS WINGS
-                        // CNPJ Transportadora: 56.789.012/3000-1
+                    if(is_array($result_deliveries)){
 
-
-                        /*LISTA dos dados da tabela ENTREGAS */ 
-                        // $_id                        = $result_deliveries["_id"];
-                        // $_id_transportadora         = $result_deliveries["_id_transportadora"];
-                        // $_volumes                   = $result_deliveries["_volumes"];
-
-                        // $_destinatario_nome         = $result_deliveries["_destinatario"]["_nome"];
-                        // $_destinatario_cpf          = $result_deliveries["_destinatario"]["_cpf"];
-                        // $_destinatario_endereco     = $result_deliveries["_destinatario"]["_endereco"];
-                        // $_destinatario_estado       = $result_deliveries["_destinatario"]["_estado"];
-                        // $_destinatario_cep          = $result_deliveries["_destinatario"]["_cep"];
-                        // $_destinatario_pais         = $result_deliveries["_destinatario"]["_pais"];
-                        // $_geolocalizacao_lat        = $result_deliveries["_destinatario"]["_geolocalizao"]["_lat"];
-                        // $_geolocalizacao_lng        = $result_deliveries["_destinatario"]["_geolocalizao"]["_lng"];
-
-                        // foreach($result_deliveries["_rastreamento"] as $runMessege){
-
-                        //     $message        = $runMessege["message"];
-                        //     $date           = $result_deliveries["_rastreamento"][0]["date"];
-
-                        // }
+                        if($_cpf == $result_deliveries["_destinatario"]['_cpf']){
+                            return $result_deliveries;
+                        }                
                     }
-                    
-
-            }
+                }
+            // }
         }
     }
 ?>

@@ -85,6 +85,7 @@
                             <h6><?= $message;?></h6>
                             <button class="view-details-btn">Ver Detalhes</button>
                             <div class="details">
+                                <h6 class="inline">-------- ENTROU NA BANCO-------</h6><br>
                                 <h6 class="inline">Data:&nbsp;</h6><?= $dateHoraFormat;?><br>
                                 <h6 class="inline">Destinatário:&nbsp;</h6><?= $_destinatario_nome;?><br>
                                 <h6 class="inline">CPF:&nbsp;</h6><?= $_destinatario_cpf;?><br>
@@ -110,13 +111,157 @@
 
             }else if(empty($list)){
 
-                $cpf_format = str_replace('.', '', str_replace('-','',$cpf));
-                $consult_api = Entregas::getObjectApi($cpf_format);
+                $cpf_format     = str_replace('.', '', str_replace('-','',$cpf));
+                $consult_api    = Entregas::getObjectApi($cpf_format);
 
-                var_dump($consult_api);
-                exit;
-               
+                // print_r($consult_api['_rastreamento']);
+                //         exit;
+                    
+                $_remetente_nome         = $consult_api['_remetente']['_nome'];
+                $_volumes                = $consult_api['_volumes'];
+                // $message                 = $consult_api['_rastreamento'][0]['message'];
+                // $date                    = $consult_api['_rastreamento'][0]['date'];
+                $date_status             = $consult_api['_rastreamento'];
+                $_destinatario_nome      = $consult_api['_destinatario']['_nome'];
+                $_destinatario_cpf       = $consult_api['_destinatario']['_cpf'];
+                $_destinatario_endereco  = $consult_api['_destinatario']['_endereco'];
+                $_destinatario_estado    = $consult_api['_destinatario']['_estado'];
+                $_destinatario_cep       = $consult_api['_destinatario']['_cep'];
+                $_destinatario_pais      = $consult_api['_destinatario']['_pais'];
+                $_lat                    = $consult_api['_destinatario']['_geolocalizao']['_lat'];
+                $_lng                    = $consult_api['_destinatario']['_geolocalizao']['_lng'];
+                // 'message'                   => $message, 
+                // 'date'                      => $date, 
                 
+                /* precisei guardar num array pois nao conseguia acessar 
+                    consult_api num foreach, dava erro de ErrorException : Illegal string offset */
+                $myArry = array(['_remetente_nome'          => $_remetente_nome, 
+                                '_volumes'                  => $_volumes, 
+                              
+                                '_destinatario_nome'        => $_destinatario_nome, 
+                                '_destinatario_cpf'         => $_destinatario_cpf,
+                                '_destinatario_endereco'    => $_destinatario_endereco,
+                                '_destinatario_estado'      => $_destinatario_estado,
+                                '_destinatario_cep'         => $_destinatario_cep,
+                                '_destinatario_pais'        => $_destinatario_pais,
+                                '_lat'                      => $_lat,
+                                '_lng'                      => $_lng,
+                            ]);
+                foreach($myArry as $runArray){
+
+                    // $message[] = $runArray['message'];
+
+
+                    $_remetente_nome        = $runArray['_remetente_nome'];
+                    $_volumes               = $runArray['_volumes'];
+                    /*Dados Destinatario */
+                    $_destinatario_nome     = $runArray['_destinatario_nome'];
+                    $_destinatario_cpf      = $runArray['_destinatario_cpf'];
+                    $_destinatario_endereco = $runArray['_destinatario_endereco'];
+                    $_destinatario_estado   = $runArray['_destinatario_estado'];
+                    $_destinatario_cep      = $runArray['_destinatario_cep'];
+                    $_destinatario_pais     = $runArray['_destinatario_pais'];
+                    /*Dados da Entrega */
+                    // $message                = $runArray['message'];
+                    // $date_format_api        = new DateTime($runArray['date']);
+                    // $dateHorFormat          = $date_format_api->format('d/m/Y H:i:s');
+                    $_geolocalizacao_lat    = floatval($runArray['_lat']);
+                    $_geolocalizacao_lng    = floatval($runArray['_lng']);
+                    // o CNPJ são 14 numeros, nos runArray fornecidos da API tem 13
+                    // $cnpj_format            = substr($runArray['_cnpj'], 0, 2).'.'.substr($runArray['_cnpj'], 2, 3).'.'.
+                    // substr($runArray['_cnpj'], 5, 3).'/'. substr($runArray['_cnpj'], 8, 4).'-'.substr($runArray['_cnpj'], 12);
+                    
+                    //CHAVE API MAPS // AIzaSyBrzcg6YhDgza-UKXnEJBpZ33gGP3cMfF0
+                    ?>
+
+                    <div class="timeline">
+                    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrzcg6YhDgza-UKXnEJBpZ33gGP3cMfF0"></script>
+                    <?php
+                    foreach ($date_status as $runStatus){
+                        $message = $runStatus['message'];
+                        $date = $runStatus['date'];
+                        
+                    ?>
+                        <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrzcg6YhDgza-UKXnEJBpZ33gGP3cMfF0&callback=initMap"></script> -->
+                        <div class="status">
+                            <h6><?= $message;?></h6>
+                            <button class="view-details-btn">Ver Detalhes</button>
+                            <div class="details">
+                                <h6 class="inline">-------- ENTROU NA API-------</h6><br>
+                                <h6 class="inline">Data:&nbsp;</h6><?= $date;?><br>
+                                <h6 class="inline">Destinatário:&nbsp;</h6><?= $_destinatario_nome;?><br>
+                                <h6 class="inline">CPF:&nbsp;</h6><?= $_destinatario_cpf;?><br>
+                                <h6 class="inline">Endereço:&nbsp;</h6><?= $_destinatario_endereco;?><br>
+                                <h6 class="inline">Estado:&nbsp;</h6><?= $_destinatario_estado;?><br>
+                                <h6 class="inline">CEP:&nbsp;</h6><?= $_destinatario_cep;?><br>
+                                <h6 class="inline">País:&nbsp;</h6><?= $_destinatario_pais;?><br>
+                                <h6 class="inline">Volumes:&nbsp;</h6><?= $_volumes;?><br>
+                                <h6 class="inline">Remetente:&nbsp;</h6><?= $_remetente_nome;?><br>
+                                <h6 class="inline">Nome Transportadora:&nbsp;</h6><br>
+                                <h6 class="inline">CNPJ Transportadora:&nbsp;</h6><br>
+                                <input type="hidden" name="lat" id="lat" value="<?= $_geolocalizacao_lat; ?>"/>
+                                <input type="hidden" name="lng" id="lng" value="<?= $_geolocalizacao_lng; ?>"/>
+                                <br>
+                                <div id="map"></div>
+                            </div>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                    </div>
+                    <script>
+                        // let lat = document.getElementById('lat').value;
+                        // let lng = document.getElementById('lng').value;
+                        // [_geolocalizacao_lng] => -56.094900
+                        // [_geolocalizacao_lat] => -15.598900
+        
+                        // -6.542190, -37.713501
+        
+                        document.addEventListener('DOMContentLoaded', function(){
+                            var detailsBtns = document.querySelectorAll('.view-details-btn');
+        
+                            detailsBtns.forEach(function (detailsBtn){
+                                detailsBtn.addEventListener('click', function(){
+                                    // próximo elemento irmão fazendo .details vir logo após .view-details-btn
+                                    var detailsDiv = this.nextElementSibling; 
+        
+                                    if(detailsDiv.style.display === 'none' || detailsDiv.style.display === ''){
+                                        detailsDiv.style.display = 'block';
+                                    }else{
+                                        detailsDiv.style.display = 'none';
+                                    }
+                                });
+                            });
+                        });
+                        
+                        let map;
+                    
+                        let lat = document.getElementById('lat').value;
+                        let lng = document.getElementById('lng').value;
+                        async function initMap(lat, lng) {
+                        const position = { lat, lng };
+                        const { Map } = await google.maps.importLibrary("maps");
+                        
+                        const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
+        
+                        const map = new google.maps.Map(document.getElementById("map"), {
+                            zoom: 10,
+                            center: { lat, lng },
+                        });
+        
+                        const marker = new AdvancedMarkerView({
+                            map: map,
+                            position: position,
+                            title: "Rastreio",
+                        });
+                        }
+                    </script>
+                    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrzcg6YhDgza-UKXnEJBpZ33gGP3cMfF0&callback=initMap"></script>
+                    <?php
+                
+                }
+                    ?>
+                <?php
             }else{
                 ?>
                  <div class="timeline">
@@ -155,7 +300,6 @@
                     });
                 });
                 
-                
                 let map;
               
                 let lat = document.getElementById('lat').value;
@@ -177,10 +321,6 @@
                     title: "Rastreio",
                 });
                 }
-
-              
-                
-                
             </script>
             <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrzcg6YhDgza-UKXnEJBpZ33gGP3cMfF0&callback=initMap"></script>
             <?php

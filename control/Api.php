@@ -11,11 +11,12 @@
         public static function getApiDeliveries(){
 
             try{
-                $url_json_deliv       = "https://run.mocky.io/v3/6334edd3-ad56-427b-8f71-a3a395c5a0c7";
-                $convert_retorn_deliv = file_get_contents($url_json_deliv);
-                $list_deliveries    = json_decode($convert_retorn_deliv, true);
+                $url_json_deliv         = "https://run.mocky.io/v3/6334edd3-ad56-427b-8f71-a3a395c5a0c7";
+                $convert_retorn_deliv   = file_get_contents($url_json_deliv);
+                $list_deliveries        = json_decode($convert_retorn_deliv, true);
                 
                 return $list_deliveries['data'];
+                // return $list_deliveries;
 
             }catch(Exception $e){
                 $error = $e->getMessage();
@@ -120,14 +121,14 @@
         }
     }
 
-    $instance_deliv = new Api();
+    // $instance_deliv = new Api();
 
-    $deliveries = Api::getApiDeliveries();
-    $instance_deliv->saveDatabaseDeliveries($deliveries);
+    // $deliveries = Api::getApiDeliveries();
+    // $instance_deliv->saveDatabaseDeliveries($deliveries);
 
-    $instance_carriers = new Api();
+    // $instance_carriers = new Api();
 
-    $carriers = Api::getCarriers();
-    $instance_carriers->saveDatabaseCarriers($carriers);
+    // $carriers = Api::getCarriers();
+    // $instance_carriers->saveDatabaseCarriers($carriers);
            
 ?>
