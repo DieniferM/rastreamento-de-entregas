@@ -1,5 +1,6 @@
 <?php
     include_once("header.php");
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +12,7 @@
     </head>
     <body>
         <div id="top-container" class="container-fluid">
-            <h1>Inicio</h1>
+            <h1>Bem-Vindo</h1>
         </div>
     </body>
 </html>

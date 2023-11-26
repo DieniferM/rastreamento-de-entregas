@@ -3,7 +3,7 @@
 
 /*
     Data: 21/11/2023
-    Descrição: Conexão com a API Json e inserção dos dados da API no banco.
+    Descrição: Conexão com a API Json e inserção dos dados da API no banco de dados.
 */
 
     class API {
@@ -46,51 +46,53 @@
                 foreach($deliveries as $infoDeliveries){
 
                     /*cadastro dos dados da tabela ENTREGAS */ 
-                    $_id                = $infoDeliveries["_id"];
-                    $_id_transportadora = $infoDeliveries["_id_transportadora"];
-                    $_volumes           = $infoDeliveries["_volumes"];
-                    $sql_entregas = "INSERT INTO entregas (_id, _id_transportadora, _volumes)
-                        VALUES ('$_id','$_id_transportadora','$_volumes')";
+                    $_id                        = $infoDeliveries["_id"];
+                    $_id_transportadora         = $infoDeliveries["_id_transportadora"];
+                    $_volumes                   = $infoDeliveries["_volumes"];
+
+                    $_remetente_nome            = $infoDeliveries["_remetente"]['_nome'];
+                    $_destinatario_nome         = $infoDeliveries["_destinatario"]["_nome"];
+                    $_destinatario_cpf          = $infoDeliveries["_destinatario"]["_cpf"];
+                    $_destinatario_endereco     = $infoDeliveries["_destinatario"]["_endereco"];
+                    $_destinatario_estado       = $infoDeliveries["_destinatario"]["_estado"];
+                    $_destinatario_cep          = $infoDeliveries["_destinatario"]["_cep"];
+                    $_destinatario_pais         = $infoDeliveries["_destinatario"]["_pais"];
+                    $_geolocalizacao_lat        = $infoDeliveries["_destinatario"]["_geolocalizao"]["_lat"];
+                    $_geolocalizacao_lng        = $infoDeliveries["_destinatario"]["_geolocalizao"]["_lng"];
+
+                    $sql_entregas = "INSERT INTO entregas (_id, _id_transportadora, _volumes, _remetente_nome, 
+                        _destinatario_nome, _destinatario_cpf, _destinatario_endereco, _destinatario_estado, _destinatario_cep, _destinatario_pais,
+                        _geolocalizacao_lat, _geolocalizacao_lng)
+                        VALUES ('$_id','$_id_transportadora','$_volumes','$_remetente_nome',
+                        '$_destinatario_nome','$_destinatario_cpf','$_destinatario_endereco','$_destinatario_estado','$_destinatario_cep',
+                        '$_destinatario_pais','$_geolocalizacao_lat','$_geolocalizacao_lng')";
                     $stmt = $conn->prepare($sql_entregas);
                     $stmt->execute();
-
-                    /*cadastro dos dados da tabela REMETENTE */ 
-                    $_nome = $infoDeliveries["_remetente"]['_nome'];
-                    $sql_remetente = "INSERT INTO _remetente (_nome) VALUES ('$_nome')";
+                   
+                    // /*cadastro dos dados da tabela REMETENTE */ 
+                    $_id_entrega    = $infoDeliveries['_id'];
+                    $_nome          = $infoDeliveries["_remetente"]['_nome'];
+                    $sql_remetente  = "INSERT INTO _remetente (_id_entrega, _nome) VALUES ('$_id_entrega','$_nome')";
                     $stmt = $conn->prepare($sql_remetente);
                     $stmt->execute();
 
-                    /*cadastro dos dados da tabela DESTINATARIO */ 
-                    $_nome_destinatario     = $infoDeliveries["_destinatario"]["_nome"];
-                    $_cpf                   = $infoDeliveries["_destinatario"]["_cpf"];
-                    $_endereco              = $infoDeliveries["_destinatario"]["_endereco"];
-                    $_estado                = $infoDeliveries["_destinatario"]["_estado"];
-                    $_cep                   = $infoDeliveries["_destinatario"]["_cep"];
-                    $_pais                  = $infoDeliveries["_destinatario"]["_pais"];
-                    $sql_destinatario = "INSERT INTO _destinatario (_nome, _cpf, _endereco, _estado, _cep, _pais)
-                        VALUES ('$_nome_destinatario','$_cpf','$_endereco', '$_estado', '$_cep', '$_pais')";
-                    $stmt = $conn->prepare($sql_destinatario);
-                    $stmt->execute();
-
-                    /*cadastro dos dados da tabela GEOLOCALIZACAO */ 
-                    $_lat  = $infoDeliveries["_destinatario"]["_geolocalizao"]["_lat"];
-                    $_lng  = $infoDeliveries["_destinatario"]["_geolocalizao"]["_lng"];
-                    $sql_geolocalizao = "INSERT INTO _geolocalizao (_lat, _lng) VALUES ('$_lat','$_lng')";
-                    $stmt = $conn->prepare($sql_geolocalizao);
-                    $stmt->execute();
-
                     /*cadastro dos dados da tabela RASTREAMENTO */ 
-                    $message = $infoDeliveries["_rastreamento"][0]["message"];
-                    $date    = $infoDeliveries["_rastreamento"][0]["date"];
-                    $format_date = date('Y-m-d H:i:s', strtotime($date));
-                    $sql_rastreamento = "INSERT INTO _rastreamento (message, date) VALUES ('$message','$format_date')";
-                    $stmt = $conn->prepare($sql_rastreamento);
-                    $stmt->execute();
+                    $_id_entrega    = $infoDeliveries["_id"];
+                    foreach($infoDeliveries["_rastreamento"] as $runMessege){
+
+                        $message    = $runMessege["message"];
+                        $date           = $infoDeliveries["_rastreamento"][0]["date"];
+                        $format_date    = date('Y-m-d H:i:s', strtotime($date));
+                        
+                        $sql_rastreamento = "INSERT INTO _rastreamento (_id_entrega, message, date) VALUES ('$_id_entrega','$message','$format_date')";
+                        $stmt = $conn->prepare($sql_rastreamento);
+                        $stmt->execute();
+                    }
 
                 }
             }catch(PDOException $e) {
                 $error = $e->getMessage();
-                echo "Erro de banco de dados: $error";
+                echo "Erro ao inserir API Entregas no banco de dados: $error";
             }
         }
 
@@ -112,7 +114,7 @@
                 }
             }catch(PDOException $e) {
                 $error = $e->getMessage();
-                echo "Erro de banco de dados: $error";
+                echo "Erro ao inserir API Transportadoras no banco de dados:: $error";
             }
         }
     }

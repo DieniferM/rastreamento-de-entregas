@@ -22,7 +22,9 @@
     <div class="container">
       <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="/brudam-test-main/index.php">Inicio</a>
-        <a class="navbar-brand" href="view/entregasForm.php">Entregas</a>
+        <!-- <a class="navbar-brand" href="view/entregasForm.php">Entregas</a> -->
+        <!-- C:\wamp64\www\brudam-test-main\view\index.php -->
+        <a class="navbar-brand" href="/brudam-test-main/view/index.php">Entregas</a>
       </nav>
     </div>
       
