@@ -1,9 +1,3 @@
-<?php
-
-//   include_once("config/url.php");
-//   include_once("config/process.php");
-
-?>
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -15,16 +9,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
   <!-- CSS -->
   <link rel="stylesheet" href="..\css\styles.css">
-  
 </head>
 <body>
   <header>
     <div class="container">
       <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="/brudam-test-main/index.php">Inicio</a>
-        <!-- <a class="navbar-brand" href="view/entregasForm.php">Entregas</a> -->
-        <!-- C:\wamp64\www\brudam-test-main\view\index.php -->
-        <a class="navbar-brand" href="/brudam-test-main/view/index.php">Entregas</a>
+        <a class="navbar-brand" href="/brudam-test-main/view/index.php">Pedidos</a>
       </nav>
     </div>
       

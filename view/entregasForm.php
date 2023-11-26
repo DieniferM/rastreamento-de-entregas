@@ -15,21 +15,18 @@
                     </div>
                 </form>
                 <script>
-                        // Verificar este filtro pois os dados salvos estao como "_destinatario_cpf": "35595606088"
-                        // Talvez azer um str_replace para tirar os pontos e traços para procurar
-
                     /* Adiciona ouvinte de eventos ao ID */
                     document.getElementById('_destinatario_cpf').addEventListener('input', function (eventObj){
                         let cpf = eventObj.target.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
                         
                         // maior que 3 adiciona ponto
-                        if (cpf.length > 3){
+                        if(cpf.length > 3){
                                 cpf = cpf.substring(0, 3) + '.' + cpf.substring(3);
                             }
-                        if (cpf.length > 7){
+                        if(cpf.length > 7){
                             cpf = cpf.substring(0, 7) + '.' + cpf.substring(7);
                         }
-                        if (cpf.length > 11){
+                        if(cpf.length > 11){
                             cpf = cpf.substring(0, 11) + '-' + cpf.substring(11);
                         }
                             eventObj.target.value = cpf;
@@ -51,14 +48,11 @@
 
         static function viewStatus($cpf){
            
-            // SE NÃO TIVER NO BANCO DE DADOS, BUSCAR NA API fazer a lógica
-
             $cpf_format = str_replace('.', '', str_replace('-','',$cpf));
 
-            $list = Destinatario::getObject($cpf_format);
+            $list = Entregas::getObject($cpf_format);
+            if($list){
                 foreach($list as $dados){
-                        // print_r($dados);
-                    
                     $messages[] = $dados['message'];
                     
                     $date_format            = new DateTime($dados['date']);
@@ -75,59 +69,77 @@
                     $_geolocalizacao_lat    = floatval($dados['_geolocalizacao_lat']);
                     $_geolocalizacao_lng    = floatval($dados['_geolocalizacao_lng']);
                     // o CNPJ são 14 numeros, nos dados fornecidos da API tem 13
-                    $cnpj_format = substr($dados['_cnpj'], 0, 2).'.'.substr($dados['_cnpj'], 2, 3).'.'.
+                    $cnpj_format            = substr($dados['_cnpj'], 0, 2).'.'.substr($dados['_cnpj'], 2, 3).'.'.
                     substr($dados['_cnpj'], 5, 3).'/'. substr($dados['_cnpj'], 8, 4).'-'.substr($dados['_cnpj'], 12);
                     //CHAVE API MAPS // AIzaSyBrzcg6YhDgza-UKXnEJBpZ33gGP3cMfF0
                 }
                 ?>
-
                 <div class="timeline">
                     <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrzcg6YhDgza-UKXnEJBpZ33gGP3cMfF0"></script>
-                <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrzcg6YhDgza-UKXnEJBpZ33gGP3cMfF0&callback=initMap"></script> -->
+                    <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrzcg6YhDgza-UKXnEJBpZ33gGP3cMfF0&callback=initMap"></script> -->
 
                     <?php
-                        foreach ($messages as $message){
-                            ?>
-                            <div class="status">
-                                <h6><?= $message;?></h6>
-                                <button class="view-details-btn">Ver Detalhes</button>
-                                <div class="details">
-                                    <h6 class="inline">Data:&nbsp;</h6><?= $dateHoraFormat;?><br>
-                                    <h6 class="inline">Destinatario:&nbsp;</h6><?= $_destinatario_nome;?><br>
-                                    <h6 class="inline">CPF:&nbsp;</h6><?= $_destinatario_cpf;?><br>
-                                    <h6 class="inline">Endereço:&nbsp;</h6><?= $_destinatario_endereco;?><br>
-                                    <h6 class="inline">Estado:&nbsp;</h6><?= $_destinatario_estado;?><br>
-                                    <h6 class="inline">CEP:&nbsp;</h6><?= $_destinatario_cep;?><br>
-                                    <h6 class="inline">País:&nbsp;</h6><?= $_destinatario_pais;?><br>
-                                    
-                                    <h6 class="inline">Volumes:&nbsp;</h6><?= $_volumes;?><br>
-                                    <h6 class="inline">Remetente:&nbsp;</h6><?= $_remetente_nome;?><br>
-                                    <h6 class="inline">Nome Transportadora:&nbsp;</h6><?= $_fantasia;?><br>
-                                    <h6 class="inline">CNPJ Transportadora:&nbsp;</h6><?= $cnpj_format;?><br>
-                                    <input type="hidden" name="lat" id="lat" value="<?= $_geolocalizacao_lat; ?>"/>
-                                    <input type="hidden" name="lng" id="lng" value="<?= $_geolocalizacao_lng; ?>"/>
-                                    <br>
-                                    <div id="map"></div>
-                                </div>
+                    foreach ($messages as $message){
+                        ?>
+                        <div class="status">
+                            <h6><?= $message;?></h6>
+                            <button class="view-details-btn">Ver Detalhes</button>
+                            <div class="details">
+                                <h6 class="inline">Data:&nbsp;</h6><?= $dateHoraFormat;?><br>
+                                <h6 class="inline">Destinatário:&nbsp;</h6><?= $_destinatario_nome;?><br>
+                                <h6 class="inline">CPF:&nbsp;</h6><?= $_destinatario_cpf;?><br>
+                                <h6 class="inline">Endereço:&nbsp;</h6><?= $_destinatario_endereco;?><br>
+                                <h6 class="inline">Estado:&nbsp;</h6><?= $_destinatario_estado;?><br>
+                                <h6 class="inline">CEP:&nbsp;</h6><?= $_destinatario_cep;?><br>
+                                <h6 class="inline">País:&nbsp;</h6><?= $_destinatario_pais;?><br>
+                                <h6 class="inline">Volumes:&nbsp;</h6><?= $_volumes;?><br>
+                                <h6 class="inline">Remetente:&nbsp;</h6><?= $_remetente_nome;?><br>
+                                <h6 class="inline">Nome Transportadora:&nbsp;</h6><?= $_fantasia;?><br>
+                                <h6 class="inline">CNPJ Transportadora:&nbsp;</h6><?= $cnpj_format;?><br>
+                                <input type="hidden" name="lat" id="lat" value="<?= $_geolocalizacao_lat; ?>"/>
+                                <input type="hidden" name="lng" id="lng" value="<?= $_geolocalizacao_lng; ?>"/>
+                                <br>
+                                <div id="map"></div>
                             </div>
-                            <?php
-
-                        }
-                            ?>
+                        </div>
+                        <?php
+                    }
+                    ?>
                 </div>
-            <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
+                <?php
 
+            }else if(empty($list)){
+
+                $cpf_format = str_replace('.', '', str_replace('-','',$cpf));
+                $consult_api = Entregas::getObjectApi($cpf_format);
+
+                var_dump($consult_api);
+                exit;
+               
+                
+            }else{
+                ?>
+                 <div class="timeline">
+                    <div class="form-group col-md-10">
+                        <div class="alert alert-danger" role="alert">
+                            <b>CPF não cadastrado!</b>
+                        </div>
+                    </div>
+                </div>
+                <?php
+            }
+                ?>
+                <!-- </div> -->
             <script>
-
                 // let lat = document.getElementById('lat').value;
                 // let lng = document.getElementById('lng').value;
                 // [_geolocalizacao_lng] => -56.094900
                 // [_geolocalizacao_lat] => -15.598900
 
                 // -6.542190, -37.713501
+
                 document.addEventListener('DOMContentLoaded', function(){
                     var detailsBtns = document.querySelectorAll('.view-details-btn');
-
 
                     detailsBtns.forEach(function (detailsBtn){
                         detailsBtn.addEventListener('click', function(){
@@ -142,6 +154,7 @@
                         });
                     });
                 });
+                
                 
                 let map;
               
@@ -164,10 +177,13 @@
                     title: "Rastreio",
                 });
                 }
+
+              
                 
-                </script>
-                <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrzcg6YhDgza-UKXnEJBpZ33gGP3cMfF0&callback=initMap"></script>
+                
+            </script>
+            <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrzcg6YhDgza-UKXnEJBpZ33gGP3cMfF0&callback=initMap"></script>
             <?php
         }
-}
+    }
 ?>

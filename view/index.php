@@ -1,7 +1,8 @@
 <?php
     include_once("..\header.php");
     include_once("../view/entregasForm.php");
-    include_once("../model\Destinatario.php");
+    include_once("../model\Entregas.php");
+    // include_once("../control\Api.php");
 
     ?>
     <!DOCTYPE html>

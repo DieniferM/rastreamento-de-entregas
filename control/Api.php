@@ -6,21 +6,7 @@
     Descrição: Conexão com a API Json e inserção dos dados da API no banco de dados.
 */
 
-    class API {
-
-        public static function getCarriers(){
-            try{
-                $url_carriers = "https://run.mocky.io/v3/e8032a9d-7c4b-4044-9d00-57733a2e2637";
-                $convert_retorn_transp = file_get_contents($url_carriers);
-                $list_carriers = json_decode($convert_retorn_transp, true);
-
-                return $list_carriers['data'];
-
-            }catch(Exception $e){
-                $error = $e->getMessage();
-                echo "Erro ao conectar a API de listagem de transportadoras: $error";
-            }
-        }
+    class Api {
 
         public static function getApiDeliveries(){
 
@@ -80,7 +66,8 @@
                     $_id_entrega    = $infoDeliveries["_id"];
                     foreach($infoDeliveries["_rastreamento"] as $runMessege){
 
-                        $message    = $runMessege["message"];
+                        $message        = $runMessege["message"];
+                        
                         $date           = $infoDeliveries["_rastreamento"][0]["date"];
                         $format_date    = date('Y-m-d H:i:s', strtotime($date));
                         
@@ -96,6 +83,20 @@
             }
         }
 
+        public static function getCarriers(){
+            try{
+                $url_carriers = "https://run.mocky.io/v3/e8032a9d-7c4b-4044-9d00-57733a2e2637";
+                $convert_retorn_transp = file_get_contents($url_carriers);
+                $list_carriers = json_decode($convert_retorn_transp, true);
+
+                return $list_carriers['data'];
+
+            }catch(Exception $e){
+                $error = $e->getMessage();
+                echo "Erro ao conectar a API de listagem de transportadoras: $error";
+            }
+        }
+        
         public function saveDatabaseCarriers($carriers){
             global $conn;
             
@@ -119,12 +120,14 @@
         }
     }
 
-    $instance_deliv = new API();
-    $deliveries = API::getApiDeliveries();
+    $instance_deliv = new Api();
+
+    $deliveries = Api::getApiDeliveries();
     $instance_deliv->saveDatabaseDeliveries($deliveries);
 
-    $instance_carriers = new API();
-    $carriers = API::getCarriers();
+    $instance_carriers = new Api();
+
+    $carriers = Api::getCarriers();
     $instance_carriers->saveDatabaseCarriers($carriers);
            
 ?>
