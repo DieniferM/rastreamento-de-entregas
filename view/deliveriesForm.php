@@ -51,26 +51,26 @@
 
             $list = Deliveries::getObject($cpf_format);
             if($list){
-                foreach($list as $dados){
-                    $messages[] = $dados['message'];
+                foreach($list as $data){
+                    $messages[] = $data['message'];
                     
-                    $date_format            = new DateTime($dados['date']);
+                    $date_format            = new DateTime($data['date']);
                     $dateHoraFormat         = $date_format->format('d/m/Y H:i:s');
-                    $_destinatario_nome     = $dados['_destinatario_nome'];
-                    $_destinatario_cpf      = $dados['_destinatario_cpf'];
+                    $_destinatario_nome     = $data['_destinatario_nome'];
+                    $_destinatario_cpf      = $data['_destinatario_cpf'];
                     $cpf_format             = substr($_destinatario_cpf, 0, 3).'.'.substr($_destinatario_cpf, 3, 3).'.'.substr($_destinatario_cpf, 6, 3).'-'.substr($_destinatario_cpf, 9, 2);
-                    $_remetente_nome        = $dados['_remetente_nome'];
-                    $_volumes               = $dados['_volumes'];
-                    $_fantasia              = $dados['_fantasia'];
-                    $_destinatario_endereco = $dados['_destinatario_endereco'];
-                    $_destinatario_estado   = $dados['_destinatario_estado'];
-                    $_destinatario_cep      = $dados['_destinatario_cep'];
-                    $_destinatario_pais     = $dados['_destinatario_pais'];
-                    $_geolocalizacao_lat    = floatval($dados['_geolocalizacao_lat']);
-                    $_geolocalizacao_lng    = floatval($dados['_geolocalizacao_lng']);
+                    $_remetente_nome        = $data['_remetente_nome'];
+                    $_volumes               = $data['_volumes'];
+                    $_fantasia              = $data['_fantasia'];
+                    $_destinatario_endereco = $data['_destinatario_endereco'];
+                    $_destinatario_estado   = $data['_destinatario_estado'];
+                    $_destinatario_cep      = $data['_destinatario_cep'];
+                    $_destinatario_pais     = $data['_destinatario_pais'];
+                    $_geolocalizacao_lat    = floatval($data['_geolocalizacao_lat']);
+                    $_geolocalizacao_lng    = floatval($data['_geolocalizacao_lng']);
                     // o CNPJ são 14 numeros, nos dados fornecidos da API tem 13
-                    $cnpj_format            = substr($dados['_cnpj'], 0, 2).'.'.substr($dados['_cnpj'], 2, 3).'.'.
-                    substr($dados['_cnpj'], 5, 3).'/'. substr($dados['_cnpj'], 8, 4).'-'.substr($dados['_cnpj'], 12);
+                    $cnpj_format            = substr($data['_cnpj'], 0, 2).'.'.substr($data['_cnpj'], 2, 3).'.'.
+                    substr($data['_cnpj'], 5, 3).'/'. substr($data['_cnpj'], 8, 4).'-'.substr($data['_cnpj'], 12);
                 }
                 ?>
                 <div class="timeline">
