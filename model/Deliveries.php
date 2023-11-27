@@ -3,10 +3,11 @@
   include_once("../control/Api.php");
     /*
         Data: 23/11/2023
-        Descrição: Classe responsável por manipular dados do usuário (destinatário) trazendo todos os dados de entrega referente ao CPF.
+        Descrição: Classe responsável por manipular dados referente ao CPF selecionado (destinatário) trazendo todos os
+        dados de entrega.
     */
 
-    class Entregas {
+    class Deliveries {
 
         public $_id;
         public $_id_transportadora;
@@ -25,9 +26,8 @@
         public $_cnpj;
         public $_fantasia;
 
+        /*Descrição: Função que recebe do form o cpf e busca dados da no banco unindo os dados através do innner join*/
         static function getObject($_cpf){
-
-            // SE NÃO TIVER NO BANCO, CONSULTAR NA API
 
             global $conn;
             try{
@@ -54,24 +54,34 @@
             }
         }
 
-        static function getObjectApi($_cpf){
+        /*Descrição: Função que recebe do form o cpf e trás dados da API Entregas*/
+        static function deliveries_list($_cpf){
                 
             $deliveries = Api::getApiDeliveries();
-        //    print_r($deliveries['data']);
-        
-        // print_r($result_deliveries);
-        // exit;
-        // if(count($deliveries)){
             
             foreach($deliveries as $result_deliveries){
-                    if(is_array($result_deliveries)){
+                if(is_array($result_deliveries)){
 
-                        if($_cpf == $result_deliveries["_destinatario"]['_cpf']){
-                            return $result_deliveries;
-                        }                
-                    }
+                    if($_cpf == $result_deliveries["_destinatario"]['_cpf']){
+                        return $result_deliveries;
+                    }                
                 }
-            // }
+            }
+        }
+
+        /*Descrição: Função que recebe do form o cpf e trás dados da API Transportadoras*/
+        static function carriers_list($_id){
+                
+            $carriers = Api::getCarriers();
+            
+            foreach($carriers as $result_carriers){
+                if(is_array($result_carriers)){
+
+                    if($_id == $result_carriers["_id"]){
+                        return $result_carriers;
+                    }                
+                }
+            }
         }
     }
 ?>

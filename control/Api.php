@@ -16,14 +16,12 @@
                 $list_deliveries        = json_decode($convert_retorn_deliv, true);
                 
                 return $list_deliveries['data'];
-                // return $list_deliveries;
 
             }catch(Exception $e){
                 $error = $e->getMessage();
                 echo "Erro ao conectar a API de listagem de entregas: $error";
                 exit;
             }
-        
         }
 
         public function saveDatabaseDeliveries($deliveries){
