@@ -1,8 +1,6 @@
 <?php
     include_once("..\header.php");
-
     class deliveriesForm {
-
         static function formSearchCPF(){
             ?>
             <div id="top-container" class="container-fluid">
@@ -30,7 +28,6 @@
                         }
                             eventObj.target.value = cpf;
                         });
-
                     function search(){
                         if(document.getElementById('_destinatario_cpf').value == ''){
                             alert('Campo CPF n\u00e3o pode estar em branco!');
@@ -44,11 +41,9 @@
             </div>
             <?php
         }
-
         static function viewStatus($cpf){
            
             $cpf_format = str_replace('.', '', str_replace('-','',$cpf));
-
             $list = Deliveries::getObject($cpf_format);
             if($list){
                 foreach($list as $data){
@@ -80,7 +75,6 @@
                     foreach ($messages as $message){
                         ?>
                         <div class="status">
-
                             <h6><?= $message;?></h6>
                             <button class="view-details-btn">Ver Detalhes</button>
                             <div class="details">
@@ -106,18 +100,15 @@
                     ?>
                 </div>
                 <?php
-
             }else{
                 /* Consultando a API caso não encontre o CPF no banco*/
                 if(empty($list)){
-
                     $cpf_format              = str_replace('.', '', str_replace('-','',$cpf));
-                    $consult_api_deliv       = Deliveries::deliveries_list($cpf_format);
-
+                    $consult_api_deliv       = Deliveries::deliveries_list_api($cpf_format);
+                    // TEM NA API? mostra e depois insere
                     if($consult_api_deliv){
-
                         $_id_transportadora      = $consult_api_deliv['_id_transportadora'];
-                        $consult_api_carriers    = Deliveries::carriers_list($_id_transportadora);
+                        $consult_api_carriers    = Deliveries::carriers_list_api($_id_transportadora);
                         $_cnpj                   = $consult_api_carriers['_cnpj'];
                         $_fantasia               = $consult_api_carriers['_fantasia'];
                         $_remetente_nome         = $consult_api_deliv['_remetente']['_nome'];
@@ -132,8 +123,7 @@
                         $_lat                    = $consult_api_deliv['_destinatario']['_geolocalizao']['_lat'];
                         $_lng                    = $consult_api_deliv['_destinatario']['_geolocalizao']['_lng'];
                     
-                        /* foi preciso guardar num array pois nao conseguia acessar 
-                            consult_api_deliv num foreach, dava erro de ErrorException : Illegal string offset */
+                        /* Para a manipulação de ambos dados de diferentes tabelas, armazenado num array. */
                         $myArry = array(['_cnpj'                    => $_cnpj, 
                                         '_fantasia'                 => $_fantasia, 
                                         '_remetente_nome'           => $_remetente_nome, 
@@ -148,7 +138,6 @@
                                         '_lng'                      => $_lng,
                                     ]);
                         foreach($myArry as $runArray){
-
                             $_remetente_nome        = $runArray['_remetente_nome'];
                             $_volumes               = $runArray['_volumes'];
                             /*Dados Destinatario */
@@ -183,7 +172,6 @@
                                     <h6><?= $message;?></h6>
                                     <button class="view-details-btn">Ver Detalhes</button>
                                     <div class="details">
-                                        <!-- <h6 class="inline">-------- ENTROU NA API-------</h6><br> -->
                                         <h6 class="inline">Data:&nbsp;</h6><?= $dateHorFormat;?><br>
                                         <h6 class="inline">Destinatário:&nbsp;</h6><?= $_destinatario_nome;?><br>
                                         <h6 class="inline">CPF:&nbsp;</h6><?= $cpf_format;?><br>
@@ -201,10 +189,17 @@
                                     </div>
                                 </div>
                                 <?php
+                                 
                             }
                             ?>
                             </div>
                         <?php
+                        $instance_deliv = new Api();
+                        $instance_deliv->saveDatabaseDeliveries($consult_api_deliv);
+
+                        $instance_carriers = new Api();
+                        $instance_carriers->saveDatabaseCarriers($consult_api_carriers);
+                            
                     }else{
                         ?>
                          <div class="timeline">
@@ -220,16 +215,13 @@
             }
                 ?>
             <script>
-
                 document.addEventListener('DOMContentLoaded', function(){
                     var detailsBtns = document.querySelectorAll('.view-details-btn');
                     var detailsDiv = document.querySelector('.details');
-
                     detailsBtns.forEach(function (detailsBtn){
                         detailsBtn.addEventListener('click', function(){
                             // próximo elemento irmão fazendo .details vir logo após .view-details-btn
                             var detailsDiv = this.nextElementSibling; 
-
                             if(detailsDiv.style.display === 'none' || detailsDiv.style.display === ''){
                                 detailsDiv.style.display = 'block';
                                 detailsBtn.textContent = 'Voltar';
@@ -242,25 +234,21 @@
                 });
                
                 let map;
-
                 async function initMap() {
                     const position = { lat: <?php echo $_geolocalizacao_lat; ?>, lng: <?php echo $_geolocalizacao_lng; ?> };
                     const { Map } = await google.maps.importLibrary("maps");
                     const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
-
                     map = new Map(document.getElementById("map"), {
                         zoom: 10,
                         center: position,
                         mapId: "DEMO_MAP_ID",
                     });
-
                     const marker = new AdvancedMarkerView({
                         map: map,
                         position: position,
                         title: "Encomenda",
                     });
                 }
-
                 initMap();
             </script>
             <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrzcg6YhDgza-UKXnEJBpZ33gGP3cMfF0&callback=initMap"></script>

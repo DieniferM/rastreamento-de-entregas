@@ -53,9 +53,10 @@
                 exit;
             }
         }
+        
 
         /*Descrição: Função que recebe do form o cpf e trás dados da API Entregas*/
-        static function deliveries_list($_cpf){
+        static function deliveries_list_api($_cpf){
                 
             $deliveries = Api::getApiDeliveries();
             
@@ -70,7 +71,7 @@
         }
 
         /*Descrição: Função que recebe do form o cpf e trás dados da API Transportadoras*/
-        static function carriers_list($_id){
+        static function carriers_list_api($_id){
                 
             $carriers = Api::getCarriers();
             
