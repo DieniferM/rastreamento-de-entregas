@@ -71,8 +71,7 @@
                     $_id_entrega    = $consult_api_deliv["_id"];
                     foreach($consult_api_deliv["_rastreamento"] as $runMessege){
                         $message        = $runMessege["message"];
-                        
-                        $date           = $consult_api_deliv["_rastreamento"][0]["date"];
+                        $date           = $runMessege["date"];
                         $format_date    = date('Y-m-d H:i:s', strtotime($date));
                         
                         $sql_rastreamento = "INSERT INTO _rastreamento (_id_entrega, message, date) VALUES ('$_id_entrega','$message','$format_date')";

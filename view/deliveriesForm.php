@@ -165,7 +165,7 @@
                         <?php
                             foreach ($date_status as $runStatus){
                                 $message = $runStatus['message'];
-                                $date_format            = new DateTime($runStatus['date']);
+                                $date_format           = new DateTime($runStatus['date']);
                                 $dateHorFormat         = $date_format->format('d/m/Y H:i:s');
                                 ?>
                                 <div class="status">
