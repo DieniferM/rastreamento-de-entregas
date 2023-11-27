@@ -12,6 +12,10 @@ Implementação de uma tela de rastreamento de entregas, com detalhes sobre o st
 ## Funcionalidades
 
 - Buscar dados pelo CPF
-- Preview do maps 
+- Preview do maps
+## Tecnologias utilizadas
+- PHP versão 7.4
+- Wamp Server
+- MySQL
 
 
